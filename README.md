@@ -1,4 +1,4 @@
-# Cisco ISE in AWS for LTRSEC-2000@Cisco Live 2022 US
+# Cisco ISE in AWS for LTRSEC-2000@Cisco Live
 
 This demo environment was cloned from that create by Thomas Howard and many others for Webinars, cloned by palloyd@cisco.com to present during Cisco Live LTRSEC-2000.
 
