@@ -66,3 +66,23 @@ variable "ise_timezone" {
         type = string
         default = "UTC"
 }
+variable "ise_ersapi" {
+        description = "Enable ERS API by Default?"
+        type = string
+        default = "yes"
+}
+variable "ise_openapi" {
+        description = "Enable Open API by Default?"
+        type = string
+        default = "yes"
+}
+variable "ise_pxgrid" {
+        description = "Enable PxGrid by Default?"
+        type = string
+        default = "no"
+}
+variable "ise_pxgridcloud" {
+        description = "Enable PxGrid Cloud by Default?"
+        type = string
+        default = "no"
+}
