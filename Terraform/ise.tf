@@ -13,18 +13,27 @@ locals {
   ntp_server_ip = "169.254.169.123"
 }
 
+#Create a DNS Entry for the Node
+resource "aws_route53_record" "www" {
+  zone_id = "${var.zer0k_zoneid}"
+  name    = "pod${var.pod_number}-ise1.${var.domain_name}"
+  type    = "A"
+  ttl     = 300
+  records = ["10.${var.pod_number}.0.5"]
+}
 
+#Create the ISE Instance
 resource "aws_instance" "ise-instance" {
     ami = data.aws_ami.ise-ami.id
     instance_type = "${var.ise_instance_type}"
     private_ip = "10.${var.pod_number}.0.5"
     subnet_id = aws_subnet.pod-private-subnet.id
     key_name = "${var.pod_keypair}"
-    security_groups =[aws_security_group.ise-security-group.id]
+    vpc_security_group_ids =[aws_security_group.ise-security-group.id]
     user_data = "hostname=pod${var.pod_number}-ise1\nprimarynameserver=${local.dns_server_ip}\ndnsdomain=${var.domain_name}\nntpserver=${local.ntp_server_ip}\ntimezone=${var.ise_timezone}\nusername=${var.ise_username}\npassword=${var.ise_password}"
 
     tags = {
-        Name = "ISEinAWS-pod${var.pod_number}"
+        Name = "pod${var.pod_number}-ise1"
         Created = "${local.formatted_date}"
     }
 }

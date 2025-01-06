@@ -37,6 +37,11 @@ variable "zer0k_vpn_subnet" {
         type = string
         default = "172.16.1.0/24"
 }
+variable "zer0k_zoneid" {
+        description = "zer0k Route53 DNS Zone ID"
+        type = string
+        default = "Z03312021O7TSH12BOWDW"
+}
 
 #ISE Variables
 variable "ise_instance_type" {
