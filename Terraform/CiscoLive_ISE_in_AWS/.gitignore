@@ -1,0 +1,8 @@
+#ignore AWS Keys
+terraform.tfvars
+
+#ignore Terraform dynamic files
+*.tfstate
+*.lock.hcl
+*.tfstate*
+.terraform/

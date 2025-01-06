@@ -1,0 +1,87 @@
+---
+
+pod_id: tbd
+#set this to your ip used to access ise, or a hostname if DNS configured
+#called in tasks/radius_probes.create.yaml
+inventory_hostname: 10.{{ pod_id }}.0.5
+ise_hostname: pod{{ pod_id }}-ise1.zer0k.com
+AWS_REGION: us-east-2
+ise_verify: false
+ise_route53_host_id: Z03312021O7TSH12BOWDW
+project_name: ISEinAWS-pod{{ pod_id }}        # use for tagging VMs and resources
+provider: AWS                 # infrastructure provider for environment options
+domain_name: zer0k.org
+transit_gateway_id: tgw-00ecf6a9a26ff37cf    
+#
+# AWS VPC
+#
+aws_region: "{{ lookup('env','AWS_REGION') | default('us-east-2') }}"
+aws_vpc_name: "{{ project_name }}"
+aws_vpc_cidr: 10.{{ pod_id }}.0.0/16
+aws_public_subnet_cidr:  10.{{ pod_id }}.1.0/24
+aws_private_subnet_cidr: 10.{{ pod_id }}.0.0/24
+aws_public_access_cidr: 0.0.0.0/0
+
+# make sure that your ssh key doesn't exist locally OR in AWS, otherwise this will get skipped.
+ssh_keypair_directory: ~/.ssh
+ssh_keypair_name: "{{ project_name }}"
+
+#
+# Linux "Ping" VM
+#
+aws_linux_ami: ami-04b6c97b14c54de18    # us-west-1 Amazon Linux 2 AMI (HVM)
+aws_linux_instance_type: t2.micro
+
+pingvm_name: ping
+pingvm_private_ip: 10.{{ pod_id }}.0.111
+pingvm_public_dns_name:  "ping_public.{{ domain_name }}"
+pingvm_private_dns_name: "ping.{{ domain_name }}"
+pingvm_dns_alias: "ping.{{ domain_name }}"
+
+#
+# Cisco ISE VM
+#
+# See https://cs.co/ise-aws for AMIs and Instance Types
+#
+aws_ise_ami: ami-07bc77592aa26607e  # us-east-2 ISE 3.3 
+aws_ise_instance_type: c5.4xlarge    # ISE Eval/Demo size
+
+ise_base_hostname: ise
+ise_username: iseadmin
+ise_password: CLUS2023Party!
+ise_rest_username: "{{ ise_username }}"
+ise_rest_password: "{{ ise_password }}"
+ise_ntp_server: time.nist.gov
+# use AWS DNS, we of course recommend you forward DNS to 208.67.222.222 and 208.67.220.220.  Ask us why!
+ise_dns_server: 169.254.169.253
+ise_timezone: EST5EDT
+
+ise_nodes:
+  - name: pod{{ pod_id }}-ise1
+    instance_type: c5.4xlarge
+    public_dns_name:  "pod{{ pod_id }}-ise1.{{ domain_name }}"
+    private_dns_name: "pod{{ pod_id }}-ise1.{{ domain_name }}"
+    dns_alias: "pod{{ pod_id }}-ise1.{{ domain_name }}"
+    private_ip: 10.{{ pod_id }}.0.5
+  # public_ip: 18.218.29.225
+    role: Primary
+    personas: [ "PAN", "MNT", "PSN" ]  # [ "Standalone", "PAN", "MNT", "PSN", "PXG" ]
+  # - name: ise-span
+  #   public_dns_name:  "ise-span.{{ domain_name }}"
+  #   private_dns_name: "ise-span.{{ domain_name }}"
+  #   dns_alias: "ise-span.{{ domain_name }}"
+  #   private_ip: 10.{{ pod_id }}.0.6
+  #   role: Secondary
+  #   personas: [ "PAN", "MNT", "PSN" ]
+
+radius_secret: cisco
+snmp_secret: Cis12345!
+tacacs_secret: Cis12345!
+
+repository_username: pod{{ pod_id }}-ise
+repository_password: Cis12345!
+
+backup_encryption_key: Cis12345!
+
+
+...
