@@ -75,3 +75,33 @@ resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.pod-private-subnet.id
   route_table_id = aws_route_table.pod-private-rt.id
 }
+
+#Create Security Group for ISE
+resource "aws_security_group" "ise-security-group" {
+  name        = "ISEinAWS-pod${var.pod_number}_Security_Group"
+  description = "Allow Management of ISE"
+  vpc_id      = aws_vpc.pod-vpc.id
+
+  tags = {
+    Name = "ISEinAWS-pod${var.pod_number}_Security_Group"
+    Created = "${local.formatted_date}"
+  }
+}
+
+resource "aws_security_group_rule" "allow_tls_ipv4" {
+  security_group_id = aws_security_group.ise-security-group.id
+  type              = "ingress"
+  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
+  from_port         = 443
+  protocol       = "tcp"
+  to_port           = 443
+}
+
+resource "aws_security_group_rule" "allow_ssh_ipv4" {
+  security_group_id = aws_security_group.ise-security-group.id
+  type              = "ingress"
+  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
+  from_port         = 22
+  protocol       = "tcp"
+  to_port           = 22
+}
