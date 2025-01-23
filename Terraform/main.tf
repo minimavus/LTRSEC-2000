@@ -113,9 +113,9 @@ resource "aws_security_group_rule" "allow_ping_ipv4" {
   security_group_id = aws_security_group.ise-security-group.id
   type              = "ingress"
   cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
-  from_port         = 42
+  from_port         = -1
   protocol       = "icmp"
-  to_port           = 42
+  to_port           = -1
 }
 
 #Get AMI from Market Place for which ever region is being used
