@@ -109,6 +109,15 @@ resource "aws_security_group_rule" "allow_ssh_ipv4" {
   to_port           = 22
 }
 
+resource "aws_security_group_rule" "allow_ping_ipv4" {
+  security_group_id = aws_security_group.ise-security-group.id
+  type              = "ingress"
+  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
+  from_port         = 42
+  protocol       = "icmp"
+  to_port           = 42
+}
+
 #Get AMI from Market Place for which ever region is being used
 data "aws_ami" "ise-ami" {
     filter {
@@ -126,14 +135,32 @@ resource "aws_route53_record" "www" {
   records = ["10.${var.pod_number}.0.5"]
 }
 
+#Check if key pair exists before creating instance
+data "aws_key_pair" "pod-keypair" {
+  key_name = "pod${var.pod_number}-keypair"
+}
+
+output "pod-key-name" {
+  value = "Creating Instance with Key Name: ${data.aws_key_pair.pod-keypair.key_name}"
+}
+
 #Create the ISE Instance
 resource "aws_instance" "ise-instance" {
     ami = data.aws_ami.ise-ami.id
     instance_type = "${var.ise_instance_type}"
     private_ip = "10.${var.pod_number}.0.5"
     subnet_id = aws_subnet.pod-private-subnet.id
-    key_name = "${var.pod_keypair}"
+    key_name = data.aws_key_pair.pod-keypair.key_name
     vpc_security_group_ids =[aws_security_group.ise-security-group.id]
+    
+    ebs_block_device {
+      device_name           = "/dev/sda1"
+      delete_on_termination = true
+      volume_type           = "gp3"
+      volume_size           = 600
+      encrypted             = false
+    }
+
     user_data = base64encode(templatefile("userdata.tftpl", { hostname = "pod${var.pod_number}-ise1", dns_domain = var.domain_name, username = var.ise_username, password = var.ise_password, time_zone = var.ise_timezone, ers_api = var.ise_ersapi, open_api = var.ise_openapi, px_grid = var.ise_pxgrid, px_grid_cloud = var.ise_pxgridcloud, primarynameserver = local.dns_server_ip, ntpserver = local.ntp_server_ip}))
     
     tags = {
