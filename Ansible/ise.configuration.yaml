@@ -37,9 +37,9 @@
     ansible.builtin.include_tasks: tasks/ise_initialized.yaml
 
   # ⟁ Verify APIs are enabled *before* gathering facts and configuring
-  - name: Enable ISE ERS & OpenAPIs
-    loop: "{{ ise_nodes }}"
-    ansible.builtin.include_tasks: tasks/ise_apis_enabled.yaml
+  #- name: Enable ISE ERS & OpenAPIs
+  #  loop: "{{ ise_nodes }}"
+  #  ansible.builtin.include_tasks: tasks/ise_apis_enabled.yaml
 
   #
   # 💡 ⟁ Must update to account for multiple nodes using ise_nodes
