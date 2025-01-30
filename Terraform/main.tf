@@ -168,3 +168,24 @@ resource "aws_instance" "ise-instance" {
         Created = "${local.formatted_date}"
     }
 }
+
+#Output Useful Information from the Deployment of the Resources
+output "instance_id" {
+  description = "The ID of the EC2 instance"
+  value       = aws_instance.ise-instance.id
+}
+
+output "instance_private_ip" {
+  description = "The private IP address of the ISE instance"
+  value       = aws_instance.ise-instance.private_ip
+}
+
+output "pod_number" {
+  description = "The pod number"
+  value       = "${var.pod_number}"
+}
+
+output "ise_password" {
+  description = "Initial ISE Password"
+  value       = "${var.ise_password}"
+}
