@@ -2,12 +2,12 @@
 variable "pod_number" {
         description = "Assigned Pod Number"
         type = string
-        default = "0"
+        default = "<TBD>"
 }
 variable "pod_keypair" {
         description = "Key Pair Created By the Student"
         type = string
-        default = "zer0k-mgmt"
+        default = "<TBD>"
 }
 
 #Reference AWS Access Kyes defined in terraform.tfvars
