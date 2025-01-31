@@ -96,7 +96,7 @@ resource "aws_security_group_rule" "allow_tls_ipv4" {
   type              = "ingress"
   cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
   from_port         = 443
-  protocol       = "tcp"
+  protocol          = "tcp"
   to_port           = 443
 }
 
@@ -105,7 +105,7 @@ resource "aws_security_group_rule" "allow_ssh_ipv4" {
   type              = "ingress"
   cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
   from_port         = 22
-  protocol       = "tcp"
+  protocol          = "tcp"
   to_port           = 22
 }
 
@@ -114,7 +114,16 @@ resource "aws_security_group_rule" "allow_ping_ipv4" {
   type              = "ingress"
   cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
   from_port         = -1
-  protocol       = "icmp"
+  protocol          = "icmp"
+  to_port           = -1
+}
+
+resource "aws_security_group_rule" "allow_ipv4_outbound" {
+  security_group_id = aws_security_group.ise-security-group.id
+  type              = "egress"
+  cidr_blocks        = ["0.0.0.0/0"]
+  from_port         = -1
+  protocol          = "all"
   to_port           = -1
 }
 
