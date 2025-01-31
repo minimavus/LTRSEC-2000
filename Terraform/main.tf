@@ -121,7 +121,7 @@ resource "aws_security_group_rule" "allow_ping_ipv4" {
 resource "aws_security_group_rule" "allow_ipv4_outbound" {
   security_group_id = aws_security_group.ise-security-group.id
   type              = "egress"
-  cidr_blocks        = ["0.0.0.0/0"]
+  cidr_blocks       = ["0.0.0.0/0"]
   from_port         = -1
   protocol          = "all"
   to_port           = -1
