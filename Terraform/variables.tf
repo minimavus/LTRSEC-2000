@@ -37,6 +37,11 @@ variable "zer0k_vpn_subnet" {
         type = string
         default = "172.16.1.0/24"
 }
+variable "zer0k_entravpn_subnet" {
+        description = "Zer0k Entra VPN Subnet CIDR"
+        type = string
+        default = "172.16.2.0/24"
+}
 variable "zer0k_zoneid" {
         description = "zer0k Route53 DNS Zone ID"
         type = string

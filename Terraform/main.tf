@@ -94,7 +94,7 @@ resource "aws_security_group" "ise-security-group" {
 resource "aws_security_group_rule" "allow_tls_ipv4" {
   security_group_id = aws_security_group.ise-security-group.id
   type              = "ingress"
-  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
+  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}", "${var.zer0k_entravpn_subne}"]
   from_port         = 443
   protocol          = "tcp"
   to_port           = 443
@@ -103,7 +103,7 @@ resource "aws_security_group_rule" "allow_tls_ipv4" {
 resource "aws_security_group_rule" "allow_ssh_ipv4" {
   security_group_id = aws_security_group.ise-security-group.id
   type              = "ingress"
-  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
+  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}", "${var.zer0k_entravpn_subne}"]
   from_port         = 22
   protocol          = "tcp"
   to_port           = 22
@@ -112,10 +112,28 @@ resource "aws_security_group_rule" "allow_ssh_ipv4" {
 resource "aws_security_group_rule" "allow_ping_ipv4" {
   security_group_id = aws_security_group.ise-security-group.id
   type              = "ingress"
-  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}"]
+  cidr_blocks       = ["${var.zer0k_inside_subnet}", "${var.zer0k_vpn_subnet}", "${var.zer0k_entravpn_subne}"]
   from_port         = -1
   protocol          = "icmp"
   to_port           = -1
+}
+
+resource "aws_security_group_rule" "allow_radiusold_ipv4" {
+  security_group_id = aws_security_group.ise-security-group.id
+  type              = "ingress"
+  cidr_blocks       = ["${var.zer0k_inside_subnet}"]
+  from_port         = 1645
+  protocol          = "udp"
+  to_port           = 1646
+}
+
+resource "aws_security_group_rule" "allow_radiusnew_ipv4" {
+  security_group_id = aws_security_group.ise-security-group.id
+  type              = "ingress"
+  cidr_blocks       = ["${var.zer0k_inside_subnet}"]
+  from_port         = 1812
+  protocol          = "udp"
+  to_port           = 1813
 }
 
 resource "aws_security_group_rule" "allow_ipv4_outbound" {
