@@ -164,7 +164,7 @@ resource "aws_route53_record" "www" {
 
 #Check if key pair exists before creating instance
 data "aws_key_pair" "pod-keypair" {
-  key_name = "pod${var.pod_number}-keypair"
+  key_name = "${var.pod_keypair}"
 }
 
 output "pod-key-name" {
