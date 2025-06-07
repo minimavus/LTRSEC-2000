@@ -61,6 +61,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "zer0k-transit-gateway" {
 #Create Private Route Table
 resource "aws_route_table" "pod-private-rt" {
   vpc_id = aws_vpc.pod-vpc.id
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.zer0k-transit-gateway]
 
   route {
     cidr_block = "0.0.0.0/0"
