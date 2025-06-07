@@ -52,7 +52,7 @@ variable "zer0k_zoneid" {
 variable "ise_instance_type" {
         description = "ISE AMI Instance Type"
         type = string
-        default = "c5.9xlarge"
+        default = "m5.4xlarge"
 }
 variable "domain_name" {
         description = "Domain Name"
