@@ -191,7 +191,7 @@ resource "aws_instance" "ise-instance" {
       encrypted             = false
     }
 
-    user_data = base64encode(templatefile("userdata.tftpl", { hostname = "pod${var.pod_number}-ise1", dns_domain = var.domain_name, username = var.ise_username, password = var.ise_password, time_zone = var.ise_timezone, ers_api = var.ise_ersapi, open_api = var.ise_openapi, px_grid = var.ise_pxgrid, px_grid_cloud = var.ise_pxgridcloud, primarynameserver = local.dns_server_ip, ntpserver = local.ntp_server_ip}))
+    user_data_base64 = base64encode(templatefile("userdata.tftpl", { hostname = "pod${var.pod_number}-ise1", dns_domain = var.domain_name, username = var.ise_username, password = var.ise_password, time_zone = var.ise_timezone, ers_api = var.ise_ersapi, open_api = var.ise_openapi, px_grid = var.ise_pxgrid, px_grid_cloud = var.ise_pxgridcloud, primarynameserver = local.dns_server_ip, ntpserver = local.ntp_server_ip}))
     
     tags = {
         Name = "pod${var.pod_number}-ise1"
