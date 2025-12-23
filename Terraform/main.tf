@@ -148,10 +148,12 @@ resource "aws_security_group_rule" "allow_ipv4_outbound" {
 
 #Get AMI from Market Place for which ever region is being used
 data "aws_ami" "ise-ami" {
+    most_recent = true
     filter {
         name = "name"
-        values = ["Cisco Identity Services Engine (ISE) v3.4*"]
+        values = ["import-ami*"]
     }
+    owners = ["679593333241"]
 }
 
 #Create a DNS Entry for the Node
