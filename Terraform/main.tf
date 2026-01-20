@@ -29,6 +29,8 @@ provider "aws" {
 #Create Pod VPC
 resource "aws_vpc" "pod-vpc" {
   cidr_block = "10.${var.pod_number}.0.0/16"
+  enable_dns_support   = true
+	enable_dns_hostnames = true
   tags = {
     Name = "ISEinAWS-pod${var.pod_number}"
     Created = "${local.formatted_date}"
@@ -154,6 +156,12 @@ data "aws_ami" "ise-ami" {
         values = ["import-ami*"]
     }
     owners = ["679593333241"]
+}
+
+#Add VPC to Hosted Zone
+resource "aws_route53_zone_association" "pod_vpc_association" {
+  zone_id = "${var.zer0k_zoneid}"
+  vpc_id  = aws_vpc.pod-vpc.id
 }
 
 #Create a DNS Entry for the Node
